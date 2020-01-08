@@ -6,6 +6,19 @@ module MicroCoverageTestSuite
 using MicroCoverage
 using Test
 
+function get_test_directory()::String
+    return dirname(@__FILE__)
+end
+
+function get_filename(parts...)::String
+    return joinpath(get_test_directory(), parts...)
+end
+
+function readstring_filename(parts...)::String
+    _filename = get_filename(parts...)
+    return read(_filename, String)
+end
+
 @testset "MicroCoverage.jl" begin
     @testset "assert.jl" begin
         @test MicroCoverage.always_assert(true, "") == nothing
@@ -17,55 +30,60 @@ using Test
     @testset "public_interface.jl" begin
         MicroCoverage.with_temp_dir() do tmp_depot
             MicroCoverage.with_temp_dir() do tmp_src_directory
-                nonexistent_filename = joinpath(tmp_src_directory,
-                                                "nonexistent.jl")
-                foo_jl_filename = joinpath(tmp_src_directory,
-                                           "foo.jl")
-                test_foo_jl_filename = joinpath(tmp_src_directory,
-                                                "test_foo.jl")
-                foo_jl_microcov_filename = joinpath(tmp_src_directory,
-                                                    "foo.jl.microcov")
+                nonexistent_filename = joinpath(tmp_src_directory, "nonexistent.jl")
+                foo_jl_filename = joinpath(tmp_src_directory, "foo.jl")
+                test_foo_jl_filename = joinpath(tmp_src_directory, "test_foo.jl")
+                foo_jl_microcov_filename = joinpath(tmp_src_directory, "foo.jl.microcov")
+                bar_jl_filename = joinpath(tmp_src_directory, "bar.jl")
+                test_bar_jl_filename = joinpath(tmp_src_directory, "test_bar.jl")
+                bar_jl_microcov_filename = joinpath(tmp_src_directory, "bar.jl.microcov")
+
                 open(foo_jl_filename, "w") do io
-                    println(io, "function foo(x)")
-                    println(io, "    if x == 1 || x == 100")
-                    println(io, "        return \"hello\"")
-                    println(io, "    else")
-                    println(io, "        return \"goodbye\"")
-                    println(io, "    end")
-                    println(io, "end")
+                    print(io, readstring_filename("inputs", "foo.jl"))
                 end
                 open(test_foo_jl_filename, "w") do io
-                    println(io, "using Test")
-                    println(io, "")
-                    println(io, "@test foo(1) == \"hello\"")
+                    print(io, readstring_filename("inputs", "test_foo.jl"))
                 end
+                open(bar_jl_filename, "w") do io
+                    print(io, readstring_filename("inputs", "bar.jl"))
+                end
+                open(test_bar_jl_filename, "w") do io
+                    print(io, readstring_filename("inputs", "test_bar.jl"))
+                end
+
                 @test_throws ArgumentError MicroCoverage.start(nonexistent_filename)
                 @test_throws ArgumentError MicroCoverage.clean(nonexistent_filename)
                 MicroCoverage.start(strip(foo_jl_filename))
+                MicroCoverage.start(bar_jl_filename)
+
+                MicroCoverage.preview_coverage(; dump_coverage_io = devnull)
                 include(foo_jl_filename)
+                MicroCoverage.preview_coverage(; dump_coverage_io = devnull)
+                include(bar_jl_filename)
                 MicroCoverage.preview_coverage(; dump_coverage_io = devnull)
                 include(test_foo_jl_filename)
                 MicroCoverage.preview_coverage(; dump_coverage_io = devnull)
+                include(test_bar_jl_filename)
+                MicroCoverage.preview_coverage(; dump_coverage_io = devnull)
+
                 @test !isfile(foo_jl_microcov_filename)
                 @test !ispath(foo_jl_microcov_filename)
-                @test Main.MicroCoverage_tracker == Bool[1,0,1,1,0,0,1,1,1,1]
-                MicroCoverage.stop(; dump_coverage = true,
-                                     dump_coverage_io = devnull)
+                @test !isfile(bar_jl_microcov_filename)
+                @test !ispath(bar_jl_microcov_filename)
+
+                MicroCoverage.stop(; dump_coverage = true, dump_coverage_io = devnull)
+
                 @test isfile(foo_jl_microcov_filename)
                 @test ispath(foo_jl_microcov_filename)
-                foo_jl_microcov_filecontents = read(foo_jl_microcov_filename, String)
+                @test isfile(bar_jl_microcov_filename)
+                @test ispath(bar_jl_microcov_filename)
+
+                @test read(foo_jl_microcov_filename, String) == readstring_filename("expected_outputs", "foo.jl.microcov.expected")
+                @test read(bar_jl_microcov_filename, String) == readstring_filename("expected_outputs", "bar.jl.microcov.expected")
                 touch(foo_jl_microcov_filename)
                 MicroCoverage.clean(foo_jl_filename)
                 touch(foo_jl_microcov_filename)
                 MicroCoverage.clean(tmp_src_directory)
-                @test foo_jl_microcov_filecontents == string("[1,1,1]                 function foo(x)\n",
-                                                             "[1,0,1,0,1]                 if x == 1 || x == 100\n",
-                                                             "[1]                             return \"hello\"\n",
-                                                             "-                           else\n",
-                                                             "[0]                             return \"goodbye\"\n",
-                                                             "-                           end\n",
-                                                             "-                       end\n",
-                                                             "-                       \n")
             end
         end
     end
