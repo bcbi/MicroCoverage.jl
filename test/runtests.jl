@@ -11,6 +11,9 @@ using Test
         @test MicroCoverage.always_assert(true, "") == nothing
         @test_throws MicroCoverage.AlwaysAssertionError MicroCoverage.always_assert(false, "")
     end
+    @testset "instrument.jl" begin
+        MicroCoverage.instrument("", Expr(:block), Val(:block)) == Expr(:block)
+    end
     @testset "public_interface.jl" begin
         MicroCoverage.with_temp_dir() do tmp_depot
             MicroCoverage.with_temp_dir() do tmp_src_directory
