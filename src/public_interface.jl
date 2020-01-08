@@ -14,7 +14,7 @@ function start(path::AbstractString)
     if isfile(path)
         return _start_tracking_file(path)
     else
-        throw(ArgumentError("Path must be a file"))
+        throw(ArgumentError("Path must be an existing file"))
     end
 end
 
@@ -37,12 +37,11 @@ function stop(; dump_coverage::Bool = false,
 end
 
 function clean(path::AbstractString = pwd())
-    _realpath::String = convert(String, realpath(path))::String
-    if isfile(_realpath)
-        return _clean_file(_realpath)
-    elseif isdir(_realpath)
-        return _clean_directory(_realpath)
+    if isfile(path)
+        return _clean_file(convert(String, realpath(path)))
+    elseif isdir(path)
+        return _clean_directory(convert(String, realpath(path)))
     else
-        throw(ArgumentError("Path must be a file or directory"))
+        throw(ArgumentError("Path must be an existing file or directory"))
     end
 end
