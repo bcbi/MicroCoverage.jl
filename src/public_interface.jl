@@ -19,7 +19,9 @@ function start(path::AbstractString)
 end
 
 function stop(; dump_coverage::Bool = false,
-                dump_coverage_io::IO = stdout)
+                dump_coverage_io::IO = stdout,
+                min_padding::Integer = 1,
+                max_padding::Integer = 24)
     setup()
     all_tracked_files = tracked_files()
     for x in all_tracked_files
@@ -27,12 +29,14 @@ function stop(; dump_coverage::Bool = false,
     end
     for x in all_tracked_files
         _write_coverage(x; dump_coverage = dump_coverage,
-                           dump_coverage_io = dump_coverage_io)
+                           dump_coverage_io = dump_coverage_io,
+                           min_padding = min_padding,
+                           max_padding = max_padding)
     end
     return nothing
 end
 
-function clean(path::AbstractString)
+function clean(path::AbstractString = pwd())
     _realpath::String = convert(String, realpath(path))::String
     if isfile(_realpath)
         return _clean_file(_realpath)

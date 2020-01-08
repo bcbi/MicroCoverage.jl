@@ -22,7 +22,6 @@ end
 using Test
 
 @test foo(1) == "hello"
-@test foo(2) == "goodbye"
 ```
 
 ```julia
