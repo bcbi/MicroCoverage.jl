@@ -78,8 +78,13 @@ end
                 @test isfile(bar_jl_microcov_filename)
                 @test ispath(bar_jl_microcov_filename)
 
-                @test read(foo_jl_microcov_filename, String) == readstring_filename("expected_outputs", "foo.jl.microcov.expected")
-                @test read(bar_jl_microcov_filename, String) == readstring_filename("expected_outputs", "bar.jl.microcov.expected")
+                if Sys.iswindows()
+                    @test chomp(read(foo_jl_microcov_filename, String)) == chomp(readstring_filename("expected_outputs", "foo.jl.microcov.expected"))
+                    @test chomp(read(bar_jl_microcov_filename, String)) == chomp(readstring_filename("expected_outputs", "bar.jl.microcov.expected"))
+                else
+                    @test read(foo_jl_microcov_filename, String) == readstring_filename("expected_outputs", "foo.jl.microcov.expected")
+                    @test read(bar_jl_microcov_filename, String) == readstring_filename("expected_outputs", "bar.jl.microcov.expected")
+                end
                 touch(foo_jl_microcov_filename)
                 MicroCoverage.clean(foo_jl_filename)
                 touch(foo_jl_microcov_filename)
