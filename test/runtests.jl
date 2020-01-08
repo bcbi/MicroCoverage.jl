@@ -7,6 +7,10 @@ using MicroCoverage
 using Test
 
 @testset "MicroCoverage.jl" begin
+    @testset "assert.jl" begin
+        @test MicroCoverage.always_assert(true, "") == nothing
+        @test_throws MicroCoverage.AlwaysAssertionError MicroCoverage.always_assert(false, "")
+    end
     @testset "public_interface.jl" begin
         MicroCoverage.with_temp_dir() do tmp_depot
             MicroCoverage.with_temp_dir() do tmp_src_directory
@@ -43,6 +47,8 @@ using Test
                 @test isfile(foo_jl_microcov_filename)
                 @test ispath(foo_jl_microcov_filename)
                 foo_jl_microcov_filecontents = read(foo_jl_microcov_filename, String)
+                MicroCoverage.clean(foo_jl_filename)
+                MicroCoverage.clean(tmp_src_directory)
                 @test foo_jl_microcov_filecontents == string("[1,1,1]                 function foo(x)\n",
                                                              "[1,0,1,0,1]                 if x == 1 || x == 100\n",
                                                              "[1]                             return \"hello\"\n",
