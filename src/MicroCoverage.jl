@@ -2,4 +2,4 @@ module MicroCoverage
 
 greet() = print("Hello World!")
 
-end # module
+end # end module MicroCoverage
