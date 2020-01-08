@@ -9,3 +9,14 @@ function tracker(filename::String, lnn::LineNumberNode)
         return :(Main.MicroCoverage_tracker[$(new_tracker_length)] = true)
     end
 end
+
+function insert_prepended_tracker(filename::String,
+                                  expr::Expr,
+                                  lnn::LineNumberNode;
+                                  prepend_tracker::Bool = true)
+    if prepend_tracker
+        return Expr(:block, tracker(filename, lnn), expr)
+    else
+        return expr
+    end
+end

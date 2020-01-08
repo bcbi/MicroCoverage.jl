@@ -5,6 +5,7 @@ include("types.jl")
 include("public_interface.jl")
 
 include("assert.jl")
+include("clean.jl")
 include("coverage_compute.jl")
 include("coverage_write.jl")
 include("instrument.jl")

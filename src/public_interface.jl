@@ -14,7 +14,7 @@ function start(path::AbstractString)
     if isfile(path)
         return _start_tracking_file(path)
     else
-        throw(ArgumentError("Path must be a filename"))
+        throw(ArgumentError("Path must be a file"))
     end
 end
 
@@ -30,4 +30,15 @@ function stop(; dump_coverage::Bool = false,
                            dump_coverage_io = dump_coverage_io)
     end
     return nothing
+end
+
+function clean(path::AbstractString)
+    _realpath::String = convert(String, realpath(path))::String
+    if isfile(_realpath)
+        return _clean_file(_realpath)
+    elseif isdir(_realpath)
+        return _clean_directory(_realpath)
+    else
+        throw(ArgumentError("Path must be a file or directory"))
+    end
 end
