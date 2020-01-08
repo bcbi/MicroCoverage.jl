@@ -45,8 +45,8 @@ julia> include("test_foo.jl")
 julia> MicroCoverage.stop()
 ```
 
-**Step 4:** When you run `MicroCoverage.stop()`, MicroCoverage will
-create a file named `foo.jl.microcov` with the following contents:
+When you run `MicroCoverage.stop()`, MicroCoverage will create
+a file named `foo.jl.microcov` with the following contents:
 ```julia
 [1,1,1]                 function foo(x)
 [1,0,1,0,1]                 if x == 1 || x == 100
