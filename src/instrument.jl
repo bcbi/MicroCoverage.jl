@@ -144,6 +144,23 @@ end
 
 function instrument(filename::String,
                     expr::Expr,
+                    ::Val{:&&},
+                    lnn::LineNumberNode;
+                    prepend_tracker::Bool = true)
+    original_args = expr.args
+    num_args = length(original_args)
+    new_args = Vector{Any}(undef, num_args)
+    for i = 1:num_args
+        new_args[i] = instrument(filename, original_args[i], lnn)
+    end
+    return insert_prepended_tracker(filename,
+                                    Expr(:&&, new_args...),
+                                    lnn;
+                                    prepend_tracker = prepend_tracker)
+end
+
+function instrument(filename::String,
+                    expr::Expr,
                     ::Val{:call},
                     lnn::LineNumberNode;
                     prepend_tracker::Bool = true)

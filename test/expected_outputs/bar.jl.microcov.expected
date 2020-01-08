@@ -1,0 +1,8 @@
+[1,1,1]                 function bar(arr)
+[1,1,0,1,1]                 if "aaa" in arr && "zzz" in arr
+[0]                             return "hello"
+-                           else
+[1]                             return "goodbye"
+-                           end
+-                       end
+-                       
