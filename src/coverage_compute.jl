@@ -19,7 +19,7 @@ end
 
 function _compute_coverage_file_contents(filename::String;
                                          min_padding::Int = 1,
-                                         max_padding::Int = 12)::Vector{String}
+                                         max_padding::Int = 16)::Vector{String}
     original_source_string::String = read(filename, String)::String
     original_source_lines = split(original_source_string, '\n')
     num_lines = length(original_source_lines)

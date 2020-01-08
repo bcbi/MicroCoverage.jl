@@ -10,6 +10,8 @@ include("coverage_write.jl")
 include("instrument.jl")
 include("read_write_julia_files.jl")
 include("restore.jl")
+include("start_tracking_file.jl")
+include("tracked_files.jl")
 include("tracker.jl")
 
 end # end module MicroCoverage
