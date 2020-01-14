@@ -9,7 +9,7 @@ MicroCoverage.jl is a code coverage tool for Julia, implemented in pure Julia.
 ## Installation
 
 ```julia
-julia> using Pkg; Pkg.add(Pkg.PackageSpec(url = "https://github.com/bcbi/MicroCoverage.jl"))
+julia> using Pkg; Pkg.add("MicroCoverage")
 ```
 
 ## Example
