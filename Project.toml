@@ -1,7 +1,7 @@
 name = "MicroCoverage"
 uuid = "735f9d89-249f-4fc4-9125-480239e6a78f"
 authors = ["Dilum Aluthge <dilum@aluthge.com>"]
-version = "0.1.1"
+version = "0.1.2"
 
 [compat]
 julia = "1.3"
