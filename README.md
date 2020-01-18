@@ -65,5 +65,3 @@ a file named `foo.jl.microcov` with the following contents:
 ## Related Work
 
 1. [https://github.com/StephenVavasis/microcoverage](https://github.com/StephenVavasis/microcoverage)
-2. [https://github.com/JuliaCI/Coverage.jl](https://github.com/JuliaCI/Coverage.jl)
-3. [https://github.com/JuliaCI/CoverageTools.jl](https://github.com/JuliaCI/CoverageTools.jl)
