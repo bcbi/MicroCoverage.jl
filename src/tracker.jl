@@ -5,7 +5,7 @@ function tracker(filename::String, lnn::LineNumberNode)
         push!(Main.MicroCoverage_tracker,
               false)
         push!(Main.MicroCoverage_tracker_linenumbernodes,
-              LineNumberNode(lnn.line, filename))
+              LineNumberNode(lnn.line, Symbol(filename)))
         return :(Main.MicroCoverage_tracker[$(new_tracker_length)] = true)
     end
 end
