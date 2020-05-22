@@ -9,7 +9,7 @@ function preview_coverage(; dump_coverage_io::IO = stdout,
         coverage_lines = _compute_coverage_file_contents(x;
                                                          min_padding = min_padding,
                                                          max_padding = max_padding,
-                                                         source_code_filename = backup_filename)
+                                                         source_code_filename = Symbol(backup_filename))
         # println(dump_coverage_io, "\n")
         println(dump_coverage_io, "# Preview of $(coverage_filename):")
         for x in coverage_lines
