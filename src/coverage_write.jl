@@ -1,4 +1,4 @@
-function _write_coverage(filename::String;
+function _write_coverage(filename::Symbol;
                          dump_coverage::Bool = false,
                          dump_coverage_io::IO = stdout,
                          min_padding::Integer,

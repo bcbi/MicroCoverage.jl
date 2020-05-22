@@ -1,11 +1,12 @@
-function _restore_original_julia_file(filename::String)::Nothing
-    backup_filename = string(filename, ".backup")
+function _restore_original_julia_file(filename::Symbol)::Nothing
+    _filename = string(filename)
+    backup_filename = string(_filename, ".backup")
     always_assert(isfile(backup_filename),
                   "isfile(\"$(backup_filename)\")")
-    rm(filename; force = true, recursive = true)
+    rm(_filename; force = true, recursive = true)
     @debug("Moving file from src to dst",
            src = backup_filename,
-           dst = filename)
-    mv(backup_filename, filename; force = true)
+           dst = _filename)
+    mv(backup_filename, _filename; force = true)
     return nothing
 end

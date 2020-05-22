@@ -17,11 +17,12 @@ function _compute_lnn_to_coverage()
     end
 end
 
-function _compute_coverage_file_contents(filename::String;
+function _compute_coverage_file_contents(filename::Symbol;
                                          min_padding::Integer,
                                          max_padding::Integer,
-                                         source_code_filename::AbstractString = filename)::Vector{String}
-    original_source_string::String = read(source_code_filename, String)::String
+                                         source_code_filename::Symbol = filename)::Vector{String}
+    _source_code_filename = string(source_code_filename)
+    original_source_string::String = read(_source_code_filename, String)::String
     original_source_lines = split(original_source_string, '\n')
     num_lines = length(original_source_lines)
     lnn_to_coverage = _compute_lnn_to_coverage()
